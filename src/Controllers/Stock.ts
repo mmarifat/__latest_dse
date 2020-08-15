@@ -13,7 +13,7 @@ export class scrapDSE {
 	@Get('/:month/:year')
 	async dse(@Res() res: Res, @Req() req: Req, @Next() next: Next, @PathParams('month') month: string, @PathParams('year') year: string) {
 		const tableSelector = 'body > table > tbody > tr:nth-child(2) > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table> tbody > tr:nth-child(2) > td > table:nth-child(35) > tbody tr'
-
+		let startTime = +new Date()
 		const browser = await puppeteer.launch({headless: false})
 		const page = await browser.newPage()
 
@@ -30,7 +30,7 @@ export class scrapDSE {
 				companies.push(...await page.$$eval('a', (anchors: any) => [].map.call(anchors, (a: any) => a.href)))
 			}
 			if (companies.length)
-				resolve(companies)
+				resolve(companies.sort())
 			else
 				reject('No Companies Found!')
 
@@ -54,7 +54,11 @@ export class scrapDSE {
 			}
 		}).then(async () => {
 			await browser.close();
-			console.log(availableString);
+
+			/*console.log(availableString);*/
+			let timeInSec = ((+new Date()) - startTime) / 1000
+			console.log('Time Taken: (Sec)' + timeInSec);
+
 			res.writeHead(200, {
 				'Content-Type': 'text/*',
 				'Access-Control-Allow-Origin': '*',

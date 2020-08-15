@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "declaration": false,
+    "noResolve": false,
+    "experimentalDecorators": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "noEmit": false,
+    "inlineSources": false
+  }
+}

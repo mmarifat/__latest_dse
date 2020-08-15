@@ -7,6 +7,7 @@ Created on : Friday 16 Aug, 2020 12:05:45 BDT
 
 import {Controller, Get, Next, PathParams, Req, Res} from "@tsed/common";
 import * as puppeteer from 'puppeteer'
+import {capitalizeFistString} from "../Helpers/Helper";
 
 @Controller('/')
 export class scrapDSE {
@@ -47,7 +48,7 @@ export class scrapDSE {
 						  }
 					  })
 				)
-				if (check.some(match => match.includes(month[0].toUpperCase() + month.slice(1)) && match.includes(', ' + year))) {
+				if (check.some(match => match.includes(capitalizeFistString(month)) && match.includes(', ' + year))) {
 					available.push(company)
 					availableString.push(check)
 				}
@@ -62,7 +63,7 @@ export class scrapDSE {
 			res.writeHead(200, {
 				'Content-Type': 'text/*',
 				'Access-Control-Allow-Origin': '*',
-				'Content-Disposition': 'attachment; filename="Companies.csv"'
+				'Content-Disposition': 'attachment; filename="' + capitalizeFistString(month) + '-' + year + '.csv"'
 			});
 			res.write(available.join("\n"))
 			return next()

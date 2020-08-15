@@ -5,13 +5,13 @@ Created on : Friday 16 Aug, 2020 12:05:45 BDT
 */
 
 
-import {Controller, Get, PathParams, Req, Res} from "@tsed/common";
+import {Controller, Get, Next, PathParams, Req, Res} from "@tsed/common";
 import * as puppeteer from 'puppeteer'
 
 @Controller('/')
 export class scrapDSE {
 	@Get('/:month/:year')
-	async dse(@Res() res: Res, @Req() req: Req, @PathParams('month') month: string, @PathParams('year') year: string) {
+	async dse(@Res() res: Res, @Req() req: Req, @Next() next: Next, @PathParams('month') month: string, @PathParams('year') year: string) {
 		const tableSelector = 'body > table > tbody > tr:nth-child(2) > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table> tbody > tr:nth-child(2) > td > table:nth-child(35) > tbody tr'
 
 		const browser = await puppeteer.launch({headless: false})
@@ -22,7 +22,7 @@ export class scrapDSE {
 
 		new Promise(async (resolve, reject) => {
 			const companies: Array<string> = []
-			for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
+			for (let i = "N".charCodeAt(0); i <= "O".charCodeAt(0); i++) {
 				await page.goto('https://www.dsebd.org/latest_share_price_all_group.php?group=' + String.fromCharCode(i), {
 					waitUntil: "networkidle0",
 					timeout: 30 * 1000
@@ -55,9 +55,17 @@ export class scrapDSE {
 		}).then(async () => {
 			await browser.close();
 			console.log(availableString);
-			res.json({available})
+			res.writeHead(200, {
+				'Content-Type': 'text/*',
+				'Access-Control-Allow-Origin': '*',
+				'Content-Disposition': 'attachment; filename="Companies.csv"'
+			});
+			res.write(available.join("\n"))
+			return next()
 		}).catch(async (reason: string) => {
 			console.log(reason);
+		}).finally(() => {
+			res.end()
 		})
 	}
 }

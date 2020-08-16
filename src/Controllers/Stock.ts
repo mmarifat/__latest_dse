@@ -13,13 +13,15 @@ import {capitalizeFistString} from "../Helpers/Helper";
 export class scrapDSE {
 	@Get('')
 	async running(@Res() res: Res, @Req() req: Req, @Next() next: Next) {
-		res.send('' +
-			  '<h1 style="text-align: center">...................Server Running...................</h1>' +
+		res.send(
+			  '<div style="text-align: center">' +
+			  '<h1>...................Server Running...................</h1>' +
 			  '<hr>' +
-			  '<p style="text-align: center">Navigate to url by giving parameter of <b>month</b> and <b>year</b> respectively</p>' +
-			  '<p style="text-align: center">Hint:' +
+			  '<p>Navigate to url by giving parameter of <b>month</b> and <b>year</b> respectively</p>' +
+			  '<p>Hint:' +
 			  '<a href="localhost:8080/jun/2020" target="_blank">localhost:8080/jun/2020</a>' +
-			  '</p>'
+			  '</p>' +
+			  '</div>'
 		)
 	}
 

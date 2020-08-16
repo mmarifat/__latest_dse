@@ -11,6 +11,18 @@ import {capitalizeFistString} from "../Helpers/Helper";
 
 @Controller('/')
 export class scrapDSE {
+	@Get('')
+	async running(@Res() res: Res, @Req() req: Req, @Next() next: Next) {
+		res.send('' +
+			  '<h1 style="text-align: center">...................Server Running...................</h1>' +
+			  '<hr>' +
+			  '<p style="text-align: center">Navigate to url by giving parameter of <b>month</b> and <b>year</b> respectively</p>' +
+			  '<p style="text-align: center">Hint:' +
+			  '<a href="localhost:8080/jun/2020" target="_blank">localhost:8080/jun/2020</a>' +
+			  '</p>'
+		)
+	}
+
 	@Get('/:month/:year')
 	async dse(@Res() res: Res, @Req() req: Req, @Next() next: Next, @PathParams('month') month: string, @PathParams('year') year: string) {
 		const tableSelector = 'body > table > tbody > tr:nth-child(2) > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > table> tbody > tr:nth-child(2) > td > table:nth-child(35) > tbody tr'

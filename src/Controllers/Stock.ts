@@ -33,21 +33,18 @@ export class scrapDSE {
 		const page = await browser.newPage()
 
 		const available: Array<string> = []
-		const availableString: Array<Array<string>> = []
+		const availableAsString: Array<any> = []
 
 		new Promise(async (resolve, reject) => {
 			const companies: Array<string> = []
-			for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
-				await page.goto('https://www.dsebd.org/latest_share_price_all_group.php?group=' + String.fromCharCode(i), {
+			for (let alphabet = "A".charCodeAt(0); alphabet <= "Z".charCodeAt(0); alphabet++) {
+				await page.goto('https://www.dsebd.org/latest_share_price_all_group.php?group=' + String.fromCharCode(alphabet), {
 					waitUntil: "networkidle0",
 					timeout: 60 * 1000
 				})
 				companies.push(...await page.$$eval('a', (anchors: any) => [].map.call(anchors, (a: any) => a.href)))
 			}
-			if (companies.length)
-				resolve(companies.sort())
-			else
-				reject('No Companies Found!')
+			companies.length ? resolve(companies.sort()) : reject('No Companies Found!')
 
 		}).then(async (companies: Array<string>) => {
 			for (const company of companies) {
@@ -64,13 +61,13 @@ export class scrapDSE {
 				)
 				if (check.some(match => match.includes(capitalizeFistString(month)) && match.includes(', ' + year))) {
 					available.push(company)
-					availableString.push(check)
+					availableAsString.push(check)
 				}
 			}
 		}).then(async () => {
 			await browser.close();
 
-			/*console.log(availableString);*/
+			/*console.log(availableAsString);*/
 			let timeInSec = ((+new Date()) - startTime) / 1000
 			console.log('Time Taken: (Sec)' + timeInSec);
 

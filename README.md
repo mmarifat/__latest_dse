@@ -2,12 +2,15 @@
 
 ## Install the dependencies
 ```bash
+#1
+npm i -g ts-node-dev
+npm i -g @types/ts-node-dev -D
+
+#2
 npm install
 or
 yarn install (recommended)
-and
-npm i -g ts-node-dev
-npm i -g @types/ts-node-dev -D
+
 ```
 
 ### Start

@@ -38,7 +38,7 @@ export class scrapDSE {
 			for (let i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
 				await page.goto('https://www.dsebd.org/latest_share_price_all_group.php?group=' + String.fromCharCode(i), {
 					waitUntil: "networkidle0",
-					timeout: 30 * 1000
+					timeout: 60 * 1000
 				})
 				companies.push(...await page.$$eval('a', (anchors: any) => [].map.call(anchors, (a: any) => a.href)))
 			}
@@ -51,7 +51,7 @@ export class scrapDSE {
 			for (const company of companies) {
 				await page.goto(company, {
 					waitUntil: "networkidle0",
-					timeout: 30 * 1000
+					timeout: 60 * 1000
 				})
 				const check: Array<string> = await page.$$eval(tableSelector, trs =>
 					  trs.map(td => td.textContent.replace(/\s+|\t+|\n+|\r+/g, " ")).filter(m => {

@@ -1,4 +1,4 @@
-# DSE Scrapper (puppeteer)
+# Dhaka Stock Exchange Scrapper (puppeteer)
 
 ## Install the dependencies
 ```bash

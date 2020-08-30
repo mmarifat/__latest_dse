@@ -37,15 +37,23 @@ export class scrapDSE {
 
 		new Promise(async (resolve, reject) => {
 			const companies: Array<string> = []
-			for (let alphabet = "A".charCodeAt(0); alphabet <= "Z".charCodeAt(0); alphabet++) {
-				await page.goto('https://www.dsebd.org/latest_share_price_all_group.php?group=' + String.fromCharCode(alphabet), {
+			for (let alphabet = "Y".charCodeAt(0); alphabet <= "Z".charCodeAt(0); alphabet++) {
+				await page.goto('https://www.dsebd.org/latest_share_price_scroll_group.php?group=' + String.fromCharCode(alphabet), {
 					waitUntil: "networkidle0",
 					timeout: 60 * 1000
 				})
+
 				companies.push(...await page.$$eval('a', (anchors: any) => [].map.call(anchors, (a: any) => a.href)))
 			}
-			companies.length ? resolve(companies.sort()) : reject('No Companies Found!')
 
+			//@ts-ignore
+			let filtered: Array<string> = [...new Set(companies.filter((n) => {
+				if (n.toString().includes('displayCompany.php?name=')) {
+					return n
+				}
+			}))]
+
+			filtered.length ? resolve(filtered.sort()) : reject('No Companies Found!')
 		}).then(async (companies: Array<string>) => {
 			for (const company of companies) {
 				await page.goto(company, {
@@ -67,12 +75,11 @@ export class scrapDSE {
 		}).then(async () => {
 			await browser.close();
 
-			/*console.log(availableAsString);*/
 			let timeInSec = ((+new Date()) - startTime) / 1000
 			console.log('Time Taken: (Sec)' + timeInSec);
 
 			res.writeHead(200, {
-				'Content-Type': 'text/*',
+				'Content-Type': 'text/!*',
 				'Access-Control-Allow-Origin': '*',
 				'Content-Disposition': 'attachment; filename="' + capitalizeFistString(month) + '-' + year + '.csv"'
 			});

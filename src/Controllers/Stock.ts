@@ -37,7 +37,7 @@ export class scrapDSE {
 
 		new Promise(async (resolve, reject) => {
 			const companies: Array<string> = []
-			for (let alphabet = "Y".charCodeAt(0); alphabet <= "Z".charCodeAt(0); alphabet++) {
+			for (let alphabet = "A".charCodeAt(0); alphabet <= "Z".charCodeAt(0); alphabet++) {
 				await page.goto('https://www.dsebd.org/latest_share_price_scroll_group.php?group=' + String.fromCharCode(alphabet), {
 					waitUntil: "networkidle0",
 					timeout: 60 * 1000
